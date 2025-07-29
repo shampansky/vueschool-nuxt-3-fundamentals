@@ -1,0 +1,30 @@
+<script setup>
+definePageMeta({
+  name: 'movies-id'
+})
+const query = ref('')
+const movies = ref([])
+
+async function search() {
+  const { Search } = await $fetch(`http://www.omdbapi.com/?apikey=876937fd&s=${query.value}`)
+  movies.value = Search
+}
+</script>
+
+<template>
+  <div>
+    <form @submit.prevent="search">
+      <input v-model="query" type="text" >
+      <button>search</button>
+    </form>
+    <ul>
+      <li v-for="movie in movies" :key="movie.imdbID">
+        <NuxtLink :to="{ name: 'movies-id', params: {id: movie.imdbID} }">
+          <img :src="movie.Poster" :alt="movie.title">
+        </NuxtLink>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<style scoped></style>
