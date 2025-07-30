@@ -1,7 +1,13 @@
-<script lang="ts"></script>
+<script setup lang="ts">
+
+const route = useRoute()
+const {data} = useAsyncData(() => {
+  return $fetch(`http://www.omdbapi.com/?apikey=876937fd&i=${route.params.id}`)
+})
+</script>
 <template>
   <div>
-    {{ $route.params.id }}
+    {{ data }}
   </div>
 </template>
 
