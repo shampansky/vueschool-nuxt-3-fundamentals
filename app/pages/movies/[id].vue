@@ -1,7 +1,7 @@
 <script setup>
 const route = useRoute();
 const { data, error } = await useFetch(`http://www.omdbapi.com/?apikey=876937fd&i=${route.params.id}`, {
-  pick: ['Title', 'Plot', 'Error'],
+  pick: ['Title', 'Plot', 'Error', 'Poster'],
   key: `/movies/${route.params.id}`,
   onResponse({response}) {
     console.log('🟢', response)
@@ -18,25 +18,17 @@ if (error.value) {
 if (data.value?.Error === 'Incorrect IMDb ID.') {
   showError({ statusCode: 404, statusMessage: 'Movie not found' })
 }
-/*
-const { data, status } = useAsyncData(
-  `/movies/${route.params.id}`,
-  () => {
-    return $fetch(
-      `http://www.omdbapi.com/?apikey=876937fd&i=${route.params.id}`
-    );
-  },
-  {
-    pick: ['Title', 'Plot'],
-    // transform: (data) => {
-    //   return {
-    //     Title: data.Title,
-    //     Plot: data.Plot,
-    //   };
-    // },
-  }
-);
-*/
+
+useHead({
+  title: data.value?.Title || 'Movie not found',
+  meta: [
+    {name: 'description', content: data.value?.Plot},
+    {property: 'og:description', content: data.value?.Plot},
+    {property: 'og:image', content: data.value?.Poster},
+    {property: 'og:title', content: data.value?.Title},
+    {name: 'twitter:card', content: 'summary_large_image'},
+  ]
+})
 </script>
 <template>
   <div>
