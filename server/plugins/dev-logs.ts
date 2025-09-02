@@ -9,17 +9,21 @@ export default defineNitroPlugin(() => {
     info: (...args: unknown[]) => original.info(...args),
     warn: (...args: unknown[]) => original.warn(...args),
     error: (...args: unknown[]) => original.error(...args),
-    debug: (...args: unknown[]) => (typeof original.debug === 'function' ? original.debug(...args) : original.log(...args)),
+    debug: (...args: unknown[]) =>
+      typeof original.debug === 'function'
+        ? original.debug(...args)
+        : original.log(...args),
   } as const
 
-  const makeForwarder = (level: keyof typeof originals) =>
+  const makeForwarder =
+    (level: keyof typeof originals) =>
     (...args: unknown[]) => {
       try {
         originals[level](...args)
         devLogBus.emit('message', {
           level,
           time: Date.now(),
-          args: args.map((a) => serializeArg(a)),
+          args: args.map(a => serializeArg(a)),
         })
       } catch {
         // noop
@@ -43,5 +47,3 @@ export default defineNitroPlugin(() => {
   console.error = makeForwarder('error') as typeof console.error
   console.debug = makeForwarder('debug') as typeof console.debug
 })
-
-

@@ -3,7 +3,7 @@ export default defineNuxtPlugin(() => {
 
   try {
     const source = new EventSource('/api/__dev-logs')
-    source.onmessage = (e) => {
+    source.onmessage = e => {
       if (!e.data) return
       try {
         const { level, args } = JSON.parse(e.data)
@@ -21,5 +21,3 @@ export default defineNuxtPlugin(() => {
     // ignore
   }
 })
-
-

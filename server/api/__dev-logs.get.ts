@@ -33,5 +33,3 @@ export default defineEventHandler(async (event: H3Event) => {
     devLogBus.off('message', onMessage)
   })
 })
-
-
