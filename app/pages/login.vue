@@ -1,11 +1,12 @@
 <script setup>
-const isLoggedIn = useIsLoggedIn()
+const user = useUser()
+
 definePageMeta({
   layout: 'plain',
 })
 
 function login() {
-  isLoggedIn.value = true
+  user.isLoggedIn = true
   navigateTo('/')
 }
 </script>
